@@ -1,9 +1,13 @@
 package cards
 
-sealed trait Suit
-case object Spades extends Suit
-case object Diamonds extends Suit
-case object Hearts extends Suit
-case object Clubs extends Suit
+class Deck {
+  private[this] var cards = CardIterator.shuffled
 
-case class Card(value: Int, suit: Suit)
+  def getCards(count: Int): Option[Set[Card]] = {
+    if (cards.hasNext) Some(cards.take(count).toSet) else None
+  }
+
+  def shuffle(): Unit = {
+    cards.shuffle()
+  }
+}
