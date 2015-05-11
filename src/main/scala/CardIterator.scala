@@ -1,9 +1,11 @@
 package cards
 
+import scala.util.Random
+
 /**
  * An iterator producing all possible combinations of a standard 52-card deck.
  */
-class CardIterator extends Iterator[Card] {
+class CardIterator private (shuffle: Boolean) extends Iterator[Card] {
   // We use six bits to represent all possible card combinations. The first
   // two bits encode the suit, while the next four encode the value.
   //
@@ -13,9 +15,9 @@ class CardIterator extends Iterator[Card] {
   //  |   +——— suit
   //  +——————— value
   //
-  // Normally, we need 52 combinations, but because the bit patterns for the
-  // numbers 0, 1 and 2 all have the "value" part of 0, we ignore them. Which
-  // is why we start from 55 downto 3, instead of 52 downto 0.
+  // We need 52 combinations, but because the bit patterns for the numbers 0,
+  // 1, 2 and 3 all have the "value" part of 0, we ignore them. Which is why
+  // we start from 4 upto 55, instead of 0 upto 52.
   //
   // Example: here are the first four generated cards and their bit patterns:
   //
@@ -24,17 +26,23 @@ class CardIterator extends Iterator[Card] {
   // 0001 10 -> Card(1, Hearts)
   // 0001 11 -> Card(1, Clubs)
   //
-  private[this] var counter = 55
+  private[this] var numbers =
+    if (shuffle) Random.shuffle(4 to 55) else 4 to 55
 
   override def hasNext = {
-    counter > 3
+    numbers.nonEmpty
   }
 
   override def next(): Card = {
-    val first2bits = counter & 0x03
-    val next4bits = counter >> 2
-    counter -= 1
+    val number = numbers.head
+    numbers = numbers.tail
+    val first2bits = number & 0x03
+    val next4bits = number >> 2
     Card(next4bits, suit(first2bits))
+  }
+
+  def shuffle(): Unit = {
+    numbers = Random.shuffle(numbers)
   }
 
   private def suit(n: Int): Suit = {
@@ -48,5 +56,6 @@ class CardIterator extends Iterator[Card] {
 }
 
 object CardIterator {
-  def pristine = new CardIterator
+  def ordered = new CardIterator(shuffle = false)
+  def shuffled = new CardIterator(shuffle = true)
 }

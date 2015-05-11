@@ -3,11 +3,11 @@ package test
 
 class CardIteratorTest extends FunSuite with Matchers {
   def suits = {
-    CardIterator.pristine.toList.groupBy(_.suit)
+    CardIterator.ordered.toList.groupBy(_.suit)
   }
 
   test("produces 52 cards") {
-    CardIterator.pristine.length should be(52)
+    CardIterator.ordered.length should be(52)
   }
 
   test("produces all suits") {

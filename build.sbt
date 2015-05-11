@@ -8,6 +8,8 @@ scalaVersion := "2.11.6"
 
 javacOptions ++= Seq("-Xlint:unchecked", "-Xlint:deprecation")
 
+initialCommands in console := "import cards._"
+
 scalacOptions ++= Seq(
   "-feature",
   "-unchecked",
