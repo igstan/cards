@@ -6,8 +6,9 @@ import scala.util.Random
  * An iterator producing all possible combinations of a standard 52-card deck.
  */
 class Deck private (shuffle: Boolean) extends Iterator[Card] {
-  // We use six bits to represent all possible card combinations. The first
-  // two bits encode the suit, while the next four encode the value.
+  // We use the first six least-significant bits of an int to represent all
+  // possible card combinations. The first two bits encode the suit, while the
+  // next four encode the value.
   //
   // bbbb bb
   //  ^   ^
@@ -17,7 +18,7 @@ class Deck private (shuffle: Boolean) extends Iterator[Card] {
   //
   // We need 52 combinations, but because the bit patterns for the numbers 0,
   // 1, 2 and 3 all have the "value" part of 0, we ignore them. Which is why
-  // we start from 4 upto 55, instead of 0 upto 52.
+  // we start from 4 upto 55, instead of 0 upto 51.
   //
   // Example: here are the first four generated cards and their bit patterns:
   //
