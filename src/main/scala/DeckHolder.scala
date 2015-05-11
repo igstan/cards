@@ -1,33 +1,32 @@
 package cards
 
-case class NonpositiveDeckCount(deckCount: Int) extends RuntimeException(s"nonpositive deck count: $deckCount")
+case class NonpositiveDeckCount(count: Int) extends RuntimeException(s"nonpositive deck count: $count")
 
-class DeckHolder(private[this] var deckCount: Int) {
-  if (deckCount < 1) {
-    throw new NonpositiveDeckCount(deckCount)
+class DeckHolder(count: Int) extends Iterator[Card] {
+  if (count < 1) {
+    throw new NonpositiveDeckCount(count)
   }
 
-  private[this] var deck = new Deck
+  private[this] val decks = Iterator.fill(count) { CardIterator.shuffled }
+  private[this] var deck = decks.next()
+
+  override def hasNext = {
+    deck.hasNext || decks.hasNext
+  }
+
+  override def next(): Card = {
+    if (!deck.hasNext) {
+      deck = decks.next()
+    }
+
+    deck.next()
+  }
 
   def getCards(count: Int): Option[Vector[Card]] = {
-    getCardsRecursive(count, None)
-  }
-
-  @annotation.tailrec
-  private def getCardsRecursive(count: Int, result: Option[Vector[Card]]): Option[Vector[Card]] = {
-    if (count == 0 || deckCount == 0) {
-      result
+    if (hasNext) {
+      Some(this.take(count).toVector)
     } else {
-      deck.getCards(count) match {
-        case None =>
-          deck = new Deck
-          deckCount -= 1
-          getCardsRecursive(count, result)
-        case Some(cards) =>
-          val vec = cards.toVector
-          val res = result.map(_ ++ vec).orElse(Some(vec))
-          getCardsRecursive(count - cards.size, res)
-      }
+      None
     }
   }
 
