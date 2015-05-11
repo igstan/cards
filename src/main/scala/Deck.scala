@@ -5,7 +5,7 @@ import scala.util.Random
 /**
  * An iterator producing all possible combinations of a standard 52-card deck.
  */
-class CardIterator private (shuffle: Boolean) extends Iterator[Card] {
+class Deck private (shuffle: Boolean) extends Iterator[Card] {
   // We use six bits to represent all possible card combinations. The first
   // two bits encode the suit, while the next four encode the value.
   //
@@ -55,7 +55,7 @@ class CardIterator private (shuffle: Boolean) extends Iterator[Card] {
   }
 }
 
-object CardIterator {
-  def ordered = new CardIterator(shuffle = false)
-  def shuffled = new CardIterator(shuffle = true)
+object Deck {
+  def ordered = new Deck(shuffle = false)
+  def shuffled = new Deck(shuffle = true)
 }

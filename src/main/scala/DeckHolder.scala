@@ -7,7 +7,7 @@ class DeckHolder(count: Int) extends Iterator[Card] {
     throw new NonpositiveDeckCount(count)
   }
 
-  private[this] val decks = Iterator.fill(count) { CardIterator.shuffled }
+  private[this] val decks = Iterator.fill(count) { Deck.shuffled }
   private[this] var deck = decks.next()
 
   override def hasNext = {

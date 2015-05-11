@@ -1,14 +1,14 @@
 package cards
 package test
 
-class CardIteratorTest extends FunSpec with Matchers {
-  describe("an ordered iterator") {
+class DeckTest extends FunSpec with Matchers {
+  describe("an ordered deck") {
     def suits = {
-      CardIterator.ordered.toList.groupBy(_.suit)
+      Deck.ordered.toList.groupBy(_.suit)
     }
 
     it("produces 52 cards") {
-      CardIterator.ordered.length should be(52)
+      Deck.ordered.length should be(52)
     }
 
     it("produces all suits") {
@@ -38,13 +38,13 @@ class CardIteratorTest extends FunSpec with Matchers {
     }
   }
 
-  describe("a shuffled iterator") {
+  describe("a shuffled deck") {
     def suits = {
-      CardIterator.shuffled.toList.groupBy(_.suit)
+      Deck.shuffled.toList.groupBy(_.suit)
     }
 
     it("produces 52 cards") {
-      CardIterator.shuffled.length should be(52)
+      Deck.shuffled.length should be(52)
     }
 
     it("produces all suits") {
